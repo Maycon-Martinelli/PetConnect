@@ -1,0 +1,104 @@
+{%load static%}
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home</title>
+    <link rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+
+    <style>
+/* Estilo da barra de navegação */
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 20px;
+    background-color: #f5f5f5;
+    border-bottom: 2px solid #e0e0e0;
+}
+
+/* Estilo da logo e nome da marca */
+.logo-container {
+    display: flex;
+    align-items: center;
+}
+
+.logo {
+    height: 100px;
+    margin-right: 10px;
+}
+
+.brand-name {
+    font-size: 1.5em;
+    font-weight: bold;
+    color: #333;
+}
+
+/* Links de navegação */
+.nav-links {
+    display: flex;
+    gap: 20px;
+}
+
+.nav-links a {
+    text-decoration: none;
+    font-size: 1,5em;
+    color: #6a0dad;
+    transition: color 0.3s;
+}
+
+.nav-links a:hover {
+    color: #4b0082;
+}
+
+/* Login/Cadastro */
+.auth-links {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.auth-links a {
+    text-decoration: none;
+    font-size: 1em;
+    color: #000;
+    font-weight: bold;
+    transition: color 0.3s;
+}
+
+.auth-links a:hover {
+    color: #7b00ce;
+}
+
+    </style>
+</head>
+<body>
+    <header class="navbar">
+        <div class="logo-container">
+            <img src="{%static 'image/petconnect.svg'%}" alt="PetConnect Logo" class="logo">
+            
+        </div>
+        <nav class="nav-links">
+            <a href="#home">Home</a>
+            <a href="#find-pets">Encontrar Pets</a>
+            <a href="#contact">Contato</a>
+            <a href="#about">Quem somos?</a>
+        </nav>
+        <div class="auth-links">
+            <i class="bi bi-person-circle fs-4"></i>
+            <a href="{%url 'login'%}" class="ms-2">Login/ Cadastro</a>
+        </div>
+    </header>
+    {%block home%}
+    {%endblock%}
+   
+  <footer>
+    
+  </footer>
+  
+ 
+</body>
+</html>
