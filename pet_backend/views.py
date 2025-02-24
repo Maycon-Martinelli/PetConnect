@@ -9,6 +9,24 @@ valor1 = 0
 verify0=0
 verify01=0
 verify_list=[]
+
+#efetua o cadastro do usuario no db
+def cadastro_user(metodo_acesso_user, nome_user, email_user, pass_word, telefone_user, cidade_user):
+    try: 
+        cadastro_info_save=user_info(
+            tipo=metodo_acesso_user,
+            nome=nome_user,
+            email=email_user,
+            senha=pass_word,
+            telefone=telefone_user,
+            cidade=cidade_user,
+            enctype_hash=shortuuid.ShortUUID().random(length=7)
+        )
+        cadastro_info_save.save()
+        return print('Dados Salvos')
+    except:
+       return HttpResponse('ERROR INIT')
+
 def verify(checkUp):
     global verify0
     verify0=+checkUp
@@ -16,7 +34,6 @@ def verify(checkUp):
 
 #home refinamento direcionando via nav bar interno
 def home(request):
-
     # for delet in RequisicaoAdotar.objects.all():
     #     RequisicaoAdotar.objects.get(pk=delet.id).delete()
 
@@ -277,6 +294,7 @@ def cadastro(request):
     
     context={'logo': 'image/petconnct.svg',
              'error_msg':False}
+    
     for user_inf in user_info.objects.all():
         verify(1) if user_inf.email == request.POST.get('email') else verify(0)
         if verify0>0:
@@ -287,24 +305,12 @@ def cadastro(request):
         return render(request, 'html/cadastro.html', context)
     
     if request.method == 'POST' and verify0==0:
-        print(request)
+        #efetua o chamado da function que recebe os valores inputados no front
+        cadastro_user(request.POST.get('type'), request.POST.get('name'),request.POST.get('email'),request.POST.get('password'),request.POST.get('phone'),request.POST.get('city'))
         
-        data_save= user_info(
-            tipo=request.POST.get('type'),
-            nome=request.POST.get('name'),
-            email=request.POST.get('email'),
-            senha=request.POST.get('password'),
-            telefone=request.POST.get('phone'),
-            cidade=request.POST.get('city'),
-            enctype_hash=shortuuid.ShortUUID().random(length=7)
-        )
-        data_save.save()
-        complement_save=user_complemento(
-            id_id=user_info.objects.latest('id').id,
-            numero=request.POST.get('phone'),
-            endereco=request.POST.get('city')
-        )
-        complement_save.save()
+        sleep(0.5)
+        complemento_save_file=user_complemento(id_id=user_info.objects.latest('id').id,numero=request.POST.get('phone'),endereco=request.POST.get('city'))
+        complemento_save_file.save()
         return redirect(login)
     else:
         #criar o retorno via front msg para user
@@ -313,6 +319,8 @@ def cadastro(request):
 
 def pubCreate(request, inst_hash):
     global valor0, verify0, verify01
+    
+
     img_save={}
 
     inst_hash=valor0.enctype_hash
@@ -638,6 +646,10 @@ def post_detail(request, id, name):
 def edit_post(request, hash, id):
     global verify0, valor0
     context={'pub_file':[]}
+    context['user_name']=valor0.nome
+    context['logout_display']=True
+    context['login_display']='none'
+    context['key_user']=valor0.enctype_hash
     try: context['id']=valor0.id 
     except: pass
     hash=get_object_or_404(user_info, enctype_hash=hash)
@@ -725,7 +737,7 @@ def edit_post(request, hash, id):
                     try:    
                         return render(request, 'html/pubPage.html', context)
                     except:
-                        return HttpResponse('Error init')
+                        return redirect('home')
     else:
         return redirect(login)
 
@@ -735,14 +747,12 @@ def delete_post(request, id, hash):
     global verify0, verify01, valor0
     list_del=[]
     excluir_account=False
-    pass
     if request.method=="POST":
         try:
             excluir_account=True if int(request.POST.get('integrar'))==1 else False
         
         except:
-         excluir_account = False
-       
+            pass
         if excluir_account==False:
             try:
                 #executa o delete de td referente a pub do user
@@ -843,7 +853,7 @@ def notify_request(request, hash):
         except:
             print('error no save')
             pass
-        return HttpResponse(f'Requisitando resposta a pub Novo destinatario:{context['id_remetente']} requisitado por:{valor0.nome, valor0.id} Resposta:{request.POST.get('request_answear')}') 
+        return redirect(f'http://127.0.0.1:8000/petconnect/menu={valor0.enctype_hash}')
     return render(request, 'html/notify.html',context)
 
 def request_fav(request):

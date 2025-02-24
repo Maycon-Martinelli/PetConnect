@@ -20,7 +20,7 @@ body {
 .main-image-container {
       position: relative;
       width: 100%;
-      height: 300px;
+      height:500px;
       overflow: hidden; /* Para esconder imagens fora da área visível */
       background-color: #d3d3d3;
     }
@@ -323,14 +323,28 @@ body {
       </div>
  
 
-<!--Fim Carossel-->   
+<!--Fim Carossel-->  
+
+<main style="display: flex;justify-content: center;flex-flow: wrap;"></main>
+    {%for index_pub in pub_index %}
+        <a href="{%url 'post_detail' name=index_pub.titulo id=index_pub.id %}" style="border: 1px solid black;width: 205px;display: flex;align-items: center;flex-direction: column;cursor:pointer;">
+          <img src="#" alt="" style="width: 200px;">
+          <p>NOME: {{index_pub.titulo}}</p>
+          <p>RAÇA: {{index_pub.raca}}</p>
+          <p>CASTRADO: {{index_pub.castrado}}</p>
+          <p>IDADE: {{index_pub.idade}}</p>
+          <p>DATA: {{index_pub.data_pub}}</p>
+          <p>DESCRIÇÃO: {{index_pub.desc}}</p>
+        </a>
+      {%endfor%}
+  </main>
 
 <!-- Descrição e Botões -->
 
 <div class="description-container">
     {%if verify == 1 and user_id == creator%}
     
-        <a href="{%url 'edit_post' hash=key_user id=id%}">Edit Pub</a>
+    <a href="{% url 'edit_post' hash=key_user id=id %}" class="btn btn-primary">Editar Publicação</a>
       
         <!-- Modal da exclução da postagem-->
    <!-- Formulário de exclusão -->
@@ -340,6 +354,10 @@ body {
     <input type="number" name="integrar" value="1" style="display: none;">
 </form>
 
+<form action="{%url 'delete_post' hash=key_user id=id %}" method="POST" style="display: none;">
+    {%csrf_token%}
+    <button id="delete_pub"></button>
+</form>
 <!-- Background escuro -->
 <div id="span_back"
     style="display:none;position: fixed;width: 100vw;height: 100vh;background-color: rgba(0, 0, 0, 0.5);
@@ -362,9 +380,13 @@ body {
             id="bt_cancel">Cancelar</button>
     </div>
 </div>
-
+<script>
+    document.querySelector('#confirm_del').addEventListener('click', function(){
+        setTimeout(function(){document.querySelector('#delete_pub').click()},250)
+    })
+</script>
 <!-- Botão de deletar -->
-<button id="botao_init" style="margin-top: 20px;">Deletar postagem</button>
+<button id="botao_init" class="btn btn-danger" style="margin: 15px;">Deletar postagem</button>
 
           <!--Fim Modal da exclução da postagem-->
           

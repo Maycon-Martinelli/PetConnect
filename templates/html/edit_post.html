@@ -1,20 +1,61 @@
-{%load static%}
+{%extends 'html/home.html'%}
 
-<form method='post' action="{%url 'edit_post' hash=inst_hash id=id%}" enctype="multipart/form-data">
-    {%csrf_token%}
-    <input type='text' value='{{pub_inf0.titulo}}' name="titulo_new">
-    <select name="" id="">
-        <option value="1">Sim</option>
-        <option value="0">Não</option>
-    </select>
-    <button>Editar</button>
-    <div id="img_files">
-    {%for url_img in pub_file%}
-        <img src="{{url_img.url}}"  alt="" style="width: 200px;" id="file_change" name="file_change" value={{url_img}}>
-        <input type="text" id="file_old" value={{url_img}} style="display:none;">
-        <input type="file" id="file_new">
-    {%endfor%}
+{% load static %}
+
+{%block home%}
+
+<div class="container mt-4">
+    
+    <div class="card shadow-sm">
+        <div class="card-header bg-primary text-white text-center">
+            <h5>Editar Publicação</h5>
+        </div>
+        <div class="card-body">
+            <form method="post" action="{% url 'edit_post' hash=inst_hash id=id %}" enctype="multipart/form-data">
+                {% csrf_token %}
+                
+                <div class="mb-3">
+                    <label for="titulo_new" class="form-label">Título:</label>
+                    <input type="text" id="titulo_new" name="titulo_new" value="{{ pub_inf0.titulo }}" class="form-control" required>
+                </div>
+                
+                <div class="mb-3">
+                    <label for="status" class="form-label">Ativo:</label>
+                    <select id="status" name="status" class="form-select">
+                        <option value="1">Sim</option>
+                        <option value="0">Não</option>
+                    </select>
+                </div>
+                
+                <div id="img_files" class="mb-3 row g-3">
+                    {% for url_img in pub_file %}
+                        <div class="col-md-4 position-relative">
+                            <div class="card border-0 shadow-sm">
+                                <img src="{{ url_img.url }}" alt="Imagem" class="card-img-top rounded img-thumbnail">
+                                <div class="card-body p-2 text-center">
+                                    <input type="hidden" name="file_old_{{ forloop.counter }}" value="{{ url_img }}">
+                                    <input type="file" class="form-control file-input" data-index="{{ forloop.counter }}">
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+                
+                <button type="submit" class="btn btn-primary w-100">Editar</button>
+            </form>
+        </div>
     </div>
+</div>
+
+<style>
+    .card {
+        border-radius: 10px;
+    }
+    .card-img-top {
+        height: 200px;
+        object-fit: cover;
+    }
+</style>
     <script>
         document.querySelectorAll('#img_files input')[1].addEventListener('change', function(){
             document.querySelectorAll('#img_files input')[0].name='file01'
@@ -43,3 +84,4 @@
         })
     </script>
 </form>
+{%endblock%}

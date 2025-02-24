@@ -1,6 +1,62 @@
 {%extends 'html/home.html'%}
 
 {%block home%}
+<style>
+    #users, #pub_name, #pub_id, #msg {
+        display: none;
+    }
+    
+    #model_requisicao {
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        text-transform: capitalize;
+        padding: 10px;
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        background-color: #f9f9f9;
+        margin-bottom: 15px;
+    }
+    
+    #model_requisicao input[type="submit"] {
+        padding: 10px 20px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        font-size: 16px;
+        margin: 5px;
+    }
+    
+    #bt_aprovado {
+        background-color: #28a745;
+        color: white;
+    }
+    
+    #bt_recusar {
+        background-color: #dc3545;
+        color: white;
+    }
+    
+    #log {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        text-transform: capitalize;
+        padding: 20px;
+    }
+    
+    #log_container {
+        width: 90%;
+        max-width: 600px;
+        padding: 15px;
+        border: 1px solid #ccc;
+        border-radius: 8px;
+        margin-bottom: 10px;
+        background-color: #fff;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+</style>
 <div id="users" style="display:none;">
 {%for users in info.user%}
     <input value="{{users}}" type="text">
@@ -179,5 +235,6 @@
         }
     },500)
 </script>
+
 {%endblock%}
 
